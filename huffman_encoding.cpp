@@ -26,47 +26,51 @@ class HuffmanEncoding {
     std::map<char, unsigned> frequency;
     std::priority_queue<Node*, std::vector<Node*>, compare> heap;
 
+    void HuffmanCode();
+
 public:
     HuffmanEncoding(const std::string userString) {
         for(const char &Ch: userString)
             frequency[Ch]++;
+
+        HuffmanCode();
     }
 
-    void HuffmanCode() {
-        Node *left, *right, *top;
-
-        std::map<char, unsigned>::const_iterator itr;
-
-        for(itr=frequency.begin(); itr != frequency.end(); ++itr)
-            heap.push(new Node(itr->first, itr->second));
-
-          while(heap.size() != 1) {
-              left = heap.top();
-              heap.pop();
-
-              right = heap.top();
-              heap.pop();
-
-              top = new Node('$', left->frequency + right->frequency);
-
-              top->left = left;
-              top->right = right;
-
-              heap.push(top);
-          }
-
-          printCodes(heap.top(), "");
+    ~HuffmanEncoding() {
+        
     }
 
-    void printCodes(Node* root, std::string str) {
-        if(root == nullptr)
-            return;
+    void printCodes(Node* root, std::string val) {
+        if(root == nullptr) return;
+        else std::cout << root->data << ": " << val << std::endl;
 
-        else
-          std::cout<<root->data<< ": "<<str<<std::endl;
-
-        printCodes(root->left, str + "0");
-        printCodes(root->right, str + "1");
+        printCodes(root->left, val + "0");
+        printCodes(root->right, val + "1");
+    }
 };
+
+void HuffmanEncoding::HuffmanCode() {
+    Node *left, *right, *top;
+
+    std::map<char, unsigned>::const_iterator itr;
+
+    for(itr = frequency.begin(); itr != frequency.end(); ++itr)
+        heap.push(new Node(itr->first, itr->second));
+
+      while(heap.size() != 1) {
+          left = heap.top();
+          heap.pop();
+
+          right = heap.top();
+          heap.pop();
+
+          top = new Node('$', left->frequency + right->frequency);
+
+          top->left = left;
+          top->right = right;
+
+          heap.push(top);
+      }
+}
 
 #endif
